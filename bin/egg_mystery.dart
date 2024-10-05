@@ -1,31 +1,29 @@
 int findThreshold(int floors) {
-  int egg1 = 0;
-  int step = 1;
-
-  // پیدا کردن نقطه شروع برای پرتاب تخم‌مرغ اول
-  while ((step * (step + 1)) / 2 < floors) {
-    step++;
+  int x = 0;
+  while ((x * (x + 1)) / 2 < floors) {
+    x++;
   }
 
-  int dropPoint = step;
+  int currentFloor = 0;
+  int step = x;
 
-  while (egg1 + dropPoint <= floors) {
-    egg1 += dropPoint;
-    dropPoint--;
-  }
-
-  // حالا تخم‌مرغ دوم برای طبقات زیرین شروع به جستجو می‌کند
-  for (int egg2 = egg1 - dropPoint; egg2 < egg1; egg2++) {
-    if (isBroken(egg2)) {
-      return egg2 - 1; // آستانه طبقه‌ی شکست
+  while (step > 0 && currentFloor + step <= floors) {
+    currentFloor += step;
+    step--;
+    if (isBroken(currentFloor)) {
+      for (int i = currentFloor - step; i < currentFloor; i++) {
+        if (isBroken(i)) {
+          return i - 1;
+        }
+      }
     }
   }
 
-  return egg1; // اگر هیچ تخم‌مرغی نشکست
+  return currentFloor;
 }
 
 bool isBroken(int floor) {
-  int breakingPoint = 0; // فرض می‌کنیم طبقه 150 آستانه شکست است
+  int breakingPoint = 150;
   return floor >= breakingPoint;
 }
 
